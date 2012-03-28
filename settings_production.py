@@ -18,7 +18,7 @@ DATABASES = {
         'NAME': 'movielistr',
         'USER': 'movielistr',
         'PASSWORD': 'g3hcm68s',
-        'HOST': '127.0.0.1',
+        'HOST': '',
         'PORT': '',
     }
 }
