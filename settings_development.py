@@ -7,16 +7,21 @@ ADMINS = (
     ('David Jairala', 'davidjairala@gmail.com'),
 )
 
-TOTAL_ROOT = '/Users/davidjairala/Projects/movielistr'
+TOTAL_ROOT = '/Users/davidjairala/Dropbox/Projects/movielistr'
+#TOTAL_ROOT = '/var/www/movielistr'
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'sqlite3'
-DATABASE_NAME = TOTAL_ROOT + '/db/db.sqlite'
-DATABASE_USER = ''
-DATABASE_PASSWORD = ''
-DATABASE_HOST = ''
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'movielistr',
+        'USER': 'movielistr',
+        'PASSWORD': 'g3hcm68s',
+        'HOST': '127.0.0.1',
+        'PORT': '',
+    }
+}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -54,9 +59,8 @@ SECRET_KEY = '0y@xec67x()w04v7r@#bts*sy^gf&gv$4w&cuxpwm$--fj-krd'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
-#     'django.template.loaders.eggs.load_template_source',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -77,14 +81,14 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-	# Markup markdown
-	'django.contrib.markup',
-	# Para el admin
-	'django.contrib.admin',
-	# App
-	'movielistr.movies',
-	'movielistr.forums',
-	'movielistr.accounts',
+    # Markup markdown
+    'django.contrib.markup',
+    # Para el admin
+    'django.contrib.admin',
+    # App
+    'movielistr.movies',
+    'movielistr.forums',
+    'movielistr.accounts',
 )
 
 # Para media estatica
