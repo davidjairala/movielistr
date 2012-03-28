@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Welcome
+{% endblock %}
+
+{% block subtitle %}
+	Welcome to MovieListr
+{% endblock %}
+
+{% block content %}
+	<div class="infobox">
+		<div class="fright">
+			<img src="/site_media/imgs/qm_64.png" alt="" />
+		</div>
+		<h2>What is MovieListr?</h2>
+		<p class="big">
+			MovieListr is an easy way to keep your movie library organized.  Basically, you search for movies you own in any medium (DVDs, Blu-ray discs, digital files) and add them to your library, while mapping them to where you have them stored.
+		</p>
+		<h2>How can I start using it?</h2>
+		<p class="big">
+			Basically, all you have to do is <a href="/register/">register</a> for free.  The whole process will only take about 10 to 20 seconds, because you only need to pick a username, a password and enter your email address, and you're done.
+		</p>
+		<h2>Then what?</h2>
+		<p class="big">
+			Once you've <a href="/register/">registered</a> and <a href="/login/">logged in</a> all you have to do is start <a href="/movies/">searching for movies</a> and adding them to {% if user.is_authenticated %}<a href="/libraries/{{ user.id }}/">your library</a>{% else %}your library{% endif %}.
+		</p>
+	</div>
+	<h1><a href="/movies/">What's new</a></h1>
+	<div class="infobox center" id="movies_cont">
+		{{ movie_html|safe }}
+		<div class="break"><!-- i --></div>
+	</div>
+	{% if threads %}
+		<h1><a href="/forums/">Latest forums threads</a></h1>
+		<div class="infobox">
+			{% for thread in threads %}
+				<div>
+					<div class="big bold">
+						<a href="/forums/{{ thread.category.id }}/">{{ thread.category.title }}</a> &raquo; 
+						<a href="/forums/{{ thread.category.id }}/{{ thread.id }}/">{{ thread.title }}</a>
+						{% if user.is_staff %}
+							( <a href="/admin/forums/thread/{{ thread.id }}/">e</a> )
+						{% endif %}
+					</div>
+					<div class="small">
+						<a href="/user/{{ thread.user.id }}/" class="bold">{{ thread.user.username }}</a> &#183; 
+						{{ thread.added|date:"m/d/Y G:i:s" }}
+					</div>
+				</div>
+				<br />
+			{% endfor %}
+		</div>
+	{% endif %}
+	{% if comments %}
+		<h1>Latests movie comments</h1>
+		<div class="infobox">
+			{% for comment in comments %}
+				<div>
+					<div class="big bold">
+						<a href="/movie/{{ comment.movie.id }}/">{{ comment.movie.title }}</a>
+					</div>
+					<div>
+						{{ comment.comment }}
+					</div>
+					<div class="small">
+						<a href="/user/{{ comment.user.id }}/" class="bold">{{ comment.user.username }}</a> &#183; 
+						{{ comment.added|date:"m/d/Y G:i:s" }}
+					</div>
+				</div>
+				<br />
+			{% endfor %}
+		</div>
+	{% endif %}
+{% endblock %}

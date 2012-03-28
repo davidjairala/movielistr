@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Forums - {{ category.title }} - {{ thread.title }} - Page {{ pnum }}
+{% endblock %}
+
+{% block subtitle %}
+	<a href="/forums/">Forums</a> &raquo; 
+	<a href="/forums/{{ category.id }}/">{{ category.title }}</a> &raquo; 
+	<a href="/forums/{{ category.id }}/{{ thread.id }}/">{{ thread.title }}</a> &raquo; Page {{ pnum }}
+	{% if user.is_staff %}
+		( <a href="/admin/forums/thread/{{ thread.id }}/">e</a> )
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+	{% if info %}
+		<p class="success">
+			{% ifequal info 'added' %}
+				Your thread has been added.  Thanks!
+			{% endifequal %}
+			{% ifequal info 'added_msg' %}
+				Your message has been added.  Thanks!
+			{% endifequal %}
+		</p>
+	{% endif %}
+	{% if msgs.object_list %}
+		<div class="comments">
+			{% for message in msgs.object_list %}
+				<div class="comment">
+					{% if user.is_staff %}
+						( <a href="/admin/forums/message/{{ message.id }}/">e</a> )
+					{% endif %}
+					<div class="bla">
+						{{ message.message|urlize|linebreaks }}
+					</div>
+					<div class="small">
+						<a href="/user/{{ message.user.id }}/" class="bold">{{ message.user.username }}</a> &#183; 
+						{{ message.added|date:"m/d/Y G:i:s" }}
+					</div>
+				</div>
+			{% endfor %}
+			<p class="nav">
+				{% if msgs.has_previous %}
+					<a href="/forums/{{ category.id }}/{{ thread.id }}/?page={{ msgs.previous_page_number }}">&larr; previous</a>
+				{% endif %}
+				{% if msgs.has_next %}
+					<a href="/forums/{{ category.id }}/{{ thread.id }}/?page={{ msgs.next_page_number }}">next &rarr;</a>
+				{% endif %}
+			</p>
+		</div>
+	{% else %}
+		<p class="error">
+			This forum doesn't have any messages yet.
+		</p>
+	{% endif %}
+	{% if user.is_authenticated %}
+		<br />
+		<form method="post" action="/forums/{{ category.id }}/{{ thread.id }}/">
+		<div class="infobox">
+			<h3>Reply:</h3>
+			<textarea name="message"></textarea>
+			{% if user.is_staff %}
+				<br />
+				<select name="cheat_user">
+					{% for suser in staff_users %}
+						<option value="{{ suser.id }}" {% ifequal suser.id user.id %}selected="selected"{% endifequal %}>{{ suser.username }}</option>
+					{% endfor %}
+				</select>
+			{% endif %}
+			<br />
+			<input type="submit" value="Reply" class="bold" />
+		</div>
+		</form>
+	{% else %}
+		<p class="error">
+			You need to <a href="/login/?next=/forums/{{ category.id }}/{{ thread.id }}/">login</a> or <a href="/login/?next=/forums/{{ category.id }}/{{ thread.id }}/">register</a> to reply to this thread.  Registration is quick, free and easy and won't take longer than 20 seconds.
+		</p>
+	{% endif %}
+{% endblock %}

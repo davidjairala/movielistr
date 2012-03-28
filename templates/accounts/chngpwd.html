@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+	My account - Change password
+{% endblock %}
+
+{% block subtitle %}
+	<a href="/account/">My account</a> &raquo; Change password
+{% endblock %}
+
+{% block content %}
+	{% if error %}
+		<p class="error">
+			{{ error }}
+		</p>
+	{% endif %}
+	<p class="info">
+		To change your password, please enter your current password and the new password you want:
+	</p>
+	<form method="post" action="/do_chngpwd/">
+	<table class="grid">
+		<tr>
+			<td>
+				Current password:
+			</td>
+			<td>
+				<input type="password" name="curr_pwd" value="" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				New password:
+			</td>
+			<td>
+				<input type="password" name="new_pwd" value="" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Confirm new password:
+			</td>
+			<td>
+				<input type="password" name="new_pwd2" value="" />
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				<input type="submit" value="Change password" class="bold" />
+			</td>
+		</tr>
+	</table>
+	</form>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Forums - {{ category.title }} - Add thread
+{% endblock %}
+
+{% block subtitle %}
+	<a href="/forums/">Forums</a> &raquo; 
+	<a href="/forums/{{ category.id }}/">{{ category.title }}</a> &raquo; Add thread
+{% endblock %}
+
+{% block content %}
+	{% if err %}
+		<p class="error">
+			{{ err }}
+		</p>
+	{% endif %}
+	<form method="post" action="/forums/{{ category.id }}/add_thread/">
+	<p>
+		<strong>Topic:</strong><br />
+		<input type="text" name="title" value="" style="width:400px;" />
+	</p>
+	<p>
+		<strong>Message:</strong><br />
+		<textarea name="message"></textarea>
+	</p>
+	{% if user.is_staff %}
+		<p>
+			<select name="cheat_user">
+				{% for suser in staff_users %}
+					<option value="{{ suser.id }}" {% ifequal user.id suser.id %}selected="selected"{% endifequal %}>{{ suser.username }}</option>
+				{% endfor %}
+			</select>
+		</p>
+	{% endif %}
+	<p>
+		<input type="submit" value="Add thread" class="bold" />
+	</p>
+	</form>
+{% endblock %}

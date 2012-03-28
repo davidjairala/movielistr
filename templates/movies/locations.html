@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}
+	{% if loc_user %}
+		{{ loc_user.username }}'s locations
+	{% else %}
+		View locations
+	{% endif %}
+{% endblock %}
+
+{% block subtitle %}
+	{% if lib_user %}
+		<a href="/locations/{{ loc_user.id }}/">{{ loc_user.username }}'s locations</a>
+	{% else %}
+		View locations
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+	{% if info %}
+		<p class="success">
+			{% ifequal info 'modded' %}
+				The location has been modified correctly.
+			{% endifequal %}
+			{% ifequal info 'removed' %}
+				The location has been removed.
+			{% endifequal %}
+		</p>
+	{% endif %}
+	{% if err %}
+		<p class="error">{{ err }}</p>
+	{% else %}
+		{% if locations %}
+			<div class="infobox">
+				<table>
+					<tr>
+						<th>Location</th>
+						{% ifequal loc_user.id user.id %}
+							<th>Options</th>
+						{% endifequal %}
+					</tr>
+					{% for loc in locations %}
+						<tr>
+							<td class="big">
+								<a href="/view_location/{{ loc.id }}/">{{ loc.tag }}</a>
+							</td>
+							<td>
+								{% ifequal loc_user.id user.id %}
+									<a href="/view_location/{{ loc.id }}/">view</a> &#183; 
+									<a href="/locations/edit/{{ loc.id }}/">edit</a> &#183; 
+									<a href="/locations/del/{{ loc.id }}/" onclick="return confirm('Are you sure?');">delete</a>
+								{% endifequal %}
+							</td>
+						</tr>
+					{% endfor %}
+				</table>
+				<div class="break"><!-- i --></div>
+				<div class="nav">
+					{% if movies.has_previous %}
+						<a href="/libraries/{{ lib_user.id }}/?page={{ movies.previous_page_number }}{% if slink %}{{ slink }}{% endif %}">&larr; previous</a>
+					{% endif %}
+					{% if movies.has_next %}
+						<a href="/libraries/{{ lib_user.id }}/?page={{ movies.next_page_number }}{% if slink %}{{ slink }}{% endif %}">next &rarr;</a>
+					{% endif %}
+				</div>
+			</div>
+			<p>
+				If you want to share this locations page with a friend, send them the following link:<br />
+				<br />
+				http://movielistr.com/locations/{{ loc_user.id }}/
+			</p>
+		{% else %}
+			<p class="error">
+				We couldn't find any locations related to what you're looking for.
+			</p>
+		{% endif %}
+		<h2>{{ loc_user.username }}'s pages</h2>
+		<ul>
+			<li><a href="/user/{{ loc_user.id }}/">account page</a></li>
+			<li><a href="/libraries/{{ loc_user.id }}/">library</a></li>
+			<li><a href="/wishlists/{{ loc_user.id }}/">wish list</a></li>
+		</ul>
+	{% endif %}
+{% endblock %}

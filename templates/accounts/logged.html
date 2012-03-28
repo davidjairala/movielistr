@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Login
+{% endblock %}
+
+{% block subtitle %}
+	Login
+{% endblock %}
+
+{% block content %}
+	{% if next %}
+		<meta http-equiv="refresh" content="1;url={{ next }}">
+	{% else %}
+		<meta http-equiv="refresh" content="1;url=/account/">
+	{% endif %}
+
+	<p>
+		You have successfully logged in.
+		<br />
+		<br />
+		If you're not redirected automatically, <a href="{% if next %}{{ next }}{% else %}/account/{% endif %}">click here</a>.
+	</p>
+{% endblock %}

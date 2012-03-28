@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Password recovery
+{% endblock %}
+
+{% block subtitle %}
+	Password recovery
+{% endblock %}
+
+{% block content %}
+	{% if error %}
+		<p class="error">
+			{{ error }}
+		</p>
+	{% endif %}
+	<p class="info">
+		If you have lost your password, you can recover/reset your password here.  To begin, please type in your email:
+	</p>
+	
+	<form method="post" action="/doRecover/">
+		<table class="grid">
+			<tr>
+				<td>
+					E-mail:
+				</td>
+				<td>
+					<input type="text" name="email" value="" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+				<td>
+					<input type="submit" value="Recover" class="bold" />
+				</td>
+			</tr>
+		</table>
+	</form>
+{% endblock %}

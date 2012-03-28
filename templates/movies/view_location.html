@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}
+	{% if location.user %}
+		{{ location.user.username }}'s {{ location.tag }}
+	{% else %}
+		View location
+	{% endif %}
+{% endblock %}
+
+{% block subtitle %}
+	{% if location.user %}
+		<a href="/locations/{{ location.user.id }}/">{{ location.user.username }}'s locations</a> &raquo; 
+		<a href="/view_location/{{ location.id }}/">{{ location.tag }}</a> &raquo; 
+		Page {{ pnum }}
+	{% else %}
+		View location
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+	{% if err %}
+		<p class="error">{{ err }}</p>
+	{% else %}
+		{% if movies.object_list %}
+			<div class="infobox">
+				{{ movies_html|safe }}
+				<div class="break"><!-- i --></div>
+				<div class="nav">
+					{% if movies.has_previous %}
+						<a href="/view_location/{{ location.id }}/?page={{ movies.previous_page_number }}{% if slink %}{{ slink }}{% endif %}">&larr; previous</a>
+					{% endif %}
+					{% if movies.has_next %}
+						<a href="/view_location/{{ location.id }}/?page={{ movies.next_page_number }}{% if slink %}{{ slink }}{% endif %}">next &rarr;</a>
+					{% endif %}
+				</div>
+			</div>
+			<p>
+				If you want to share this library with a friend, send them the following link:<br />
+				<br />
+				http://movielistr.com/locations/{{ location.id }}/
+			</p>
+		{% else %}
+			<p class="error">
+				We couldn't find any movies related to what you're looking for.  Maybe try another search term?
+			</p>
+		{% endif %}
+	{% endif %}
+{% endblock %}

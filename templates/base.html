@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>{% block title %}Welcome{% endblock %} - MovieListr</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="/site_media/css/style.css" type="text/css" />
+	<link rel="stylesheet" href="/site_media/css/jquery.autocomplete.css" type="text/css" />
+	<link rel='shortcut icon' href="/site_media/imgs/favico.ico" type="image/x-icon" />
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="/rss/" />
+	<script type="text/javascript" src="/site_media/js/jquery.js"></script>
+	<script type="text/javascript" src="/site_media/js/jquery.ajaxQueue.js"></script>
+	<script type="text/javascript" src="/site_media/js/jquery.bgiframe.min.js"></script>
+	<script type="text/javascript" src="/site_media/js/jquery.centerinclient.js"></script>
+	<script type="text/javascript" src="/site_media/js/jquery.autocomplete.pack.js"></script>
+	<script type="text/javascript" src="/site_media/js/globals.js"></script>
+</head>
+<body>
+	<div id="info"><!-- i --></div>
+	<div id="container">
+		<div id="header">
+			{% if user.is_authenticated %}
+				<div id="user_menu">
+					<strong>{{ user.username }}:</strong>
+					<a href="/account/">my account</a> &#183;
+					<a href="/user/search/">user search</a> &#183;
+					<a href="/logout/">logout</a>
+				</div>
+			{% endif %}
+			{% if user.is_staff %}
+				<div id="admin_menu">
+					<strong>admin:</strong>
+					<a href="/netflix/">*netflix</a> &#183;
+					<a href="/find_trailers/">*find_trailers</a> &#183;
+				</div>
+			{% endif %}
+			<a href="/"><img src="/site_media/imgs/logo.png" alt="MovieListr" /></a>
+		</div>
+		<div id="menu">
+			<a href="/">Home</a>
+			<a href="/movies/">Movies</a>
+			{% if  user.is_authenticated %}
+				<a href="/libraries/{{ user.id }}/">My Library</a>
+				<a href="/locations/{{ user.id }}/">My Locations</a>
+				<a href="/wishlists/{{ user.id }}/">My Wish List</a>
+				<a href="/account/">My Account</a>
+			{% else %}
+				<a href="/login/">Login</a>
+				<a href="/register/">Register</a>
+			{% endif %}
+			<a href="/forums">Forums</a>
+		</div>
+		<div id="content">
+			<h1>{% block subtitle %}{% endblock %}</h1>
+			{% block content %}{% endblock %}
+		</div>
+		<div class="break"><!-- i --></div>
+		<div id="footer">
+			&copy; MovieListr &reg; &#183;
+			<a href="/forums/5/">site news</a> &#183;
+			<a href="/recover/">recover password</a>
+		</div>
+	</div>
+	{% block js %}{% endblock %}
+	<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-1958853-15");
+	pageTracker._trackPageview();
+	} catch(err) {}</script>
+</body>
+</html>

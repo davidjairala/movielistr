@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}
+	You need to login or register to continue
+{% endblock %}
+
+{% block subtitle %}
+	You need to login or register to continue
+{% endblock %}
+
+{% block content %}
+	<p class="error">
+		You need to <a href="/login/{% if next %}?next={{ next }}{% endif %}">login</a> or <a href="/register/{% if next %}?next={{ next }}{% endif %}">register</a> to continue.  Registration is free, fast and easy.
+	</p>
+	<p>
+		<a href="javascript:history.back();">Back</a>
+	</p>
+{% endblock %}

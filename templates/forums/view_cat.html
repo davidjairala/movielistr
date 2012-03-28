@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Forums - {{ category.title }} - Page {{ pnum }}
+{% endblock %}
+
+{% block subtitle %}
+	<a href="/forums/">Forums</a> &raquo; <a href="/forums/{{ category.id }}/">{{ category.title }}</a> &raquo; Page {{ pnum }}
+{% endblock %}
+
+{% block content %}
+	{% if category.admin_only %}
+		{% if user.is_staff %}
+			<div class="submenu">
+				<a href="/forums/{{ category.id }}/add_thread/">Add new thread</a>
+			</div>
+		{% endif %}
+	{% else %}
+		<div class="submenu">
+			<a href="/forums/{{ category.id }}/add_thread/">Add new thread</a>
+		</div>
+	{% endif %}
+	{% if threads.object_list %}
+		{% for thread in threads.object_list %}
+			<div>
+				<div class="big bold">
+					<a href="/forums/{{ category.id }}/{{ thread.id }}/">{{ thread.title }}</a>
+					{% if user.is_staff %}
+						( <a href="/admin/forums/thread/{{ thread.id }}/">e</a> )
+					{% endif %}
+				</div>
+				<div class="small">
+					<a href="/user/{{ thread.user.id }}/" class="bold">{{ thread.user.username }}</a> &#183; 
+					{{ thread.added|date:"m/d/Y G:i:s" }}
+				</div>
+			</div>
+			<br />
+		{% endfor %}
+		<p class="nav">
+			{% if threads.has_previous %}
+				<a href="/forums/{{ category.id }}/?page={{ threads.previous_page_number }}">&larr; previous</a>
+			{% endif %}
+			{% if threads.has_next %}
+				<a href="/forums/{{ category.id }}/?page={{ threads.next_page_number }}">next &rarr;</a>
+			{% endif %}
+		</p>
+	{% else %}
+		<p class="error">
+			This forum doesn't have any threads yet.  You can <a href="/forums/{{ category.id }}/add_thread/">create one</a>.
+		</p>
+	{% endif %}
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}
+	User registration
+{% endblock %}
+
+{% block subtitle %}
+	User registration
+{% endblock %}
+
+{% block content %}
+	{% if error %}
+		<p class="error">
+			{{ error }}
+		</p>
+	{% endif %}
+
+	<p class="info">
+		Registration with <strong>MovieListr</strong> is free, easy and fast.  Please fill in the following information:
+	</p>
+	
+	<form method="post" action="/doRegister/">
+	<table class="grid" style="width: 400px;">
+		<tr>
+			<td>
+				E-mail:
+			</td>
+			<td>
+				<input id="id_email" type="text" name="email" maxlength="30" />
+				<br />
+				<div class="small">
+					We respect your privacy and won't send you any unsolicited email.
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Username:
+			</td>
+			<td>
+				<input id="id_username" type="text" name="username" maxlength="30" />
+				<br />
+				<div class="small">
+					Required.  30 characters or less.  Only alpha-numeric characters.
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Password:
+			</td>
+			<td>
+				<input type="password" name="password1" id="id_password1" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Confirm password:
+			</td>
+			<td>
+				<input type="password" name="password2" id="id_password2" />
+				<div class="small">
+					Type in your password again.
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>
+				{% if next %}
+					<input name="next" type="hidden" value="{{ next }}" />
+				{% endif %}
+				<input type="submit" value="Register" class="bold" />
+			</td>
+		</tr>
+	</table>
+	</form>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}
+	My account
+{% endblock %}
+
+{% block subtitle %}
+	My account
+{% endblock %}
+
+{% block content %}
+	<div class="mid_block">
+		<h2>Stats</h2>
+		<p>
+			Member since {{ user.date_joined|date:"m/d/y" }}
+		</p>
+		<p>
+			You have {{ movies_owned }} movies in your library.
+		</p>
+		<p>
+			You have {{ movies_wishlist }} movies in your wishlist.
+		</p>
+		{% if avg_score %}
+			<p>
+				Your <abbr title="Your average score is an average of the individual score of all movies you own.">average score</abbr> is {{ avg_score }}.
+			</p>
+		{% endif %}
+		<h2>Badge</h2>
+		<p>
+			<a href="http://movielistr.com/libraries/{{ user.id }}/"><img src="/stats/{{ user.id }}/" /></a>
+		</p>
+		<p>
+			Want to share your badge in a site or forums?  Copy and paste the following code:
+			<br />
+			<input type="text" value='<a href="http://movielistr.com/libraries/{{ user.id }}/"><img src="http://movielistr.com/stats/{{ user.id }}/" /></a>' style="width: 430px; font-size: 0.8em;" />
+			<br />
+			Direct image link:
+			<input type="text" value='http://movielistr.com/stats/{{ user.id }}/' style="width: 430px; font-size: 0.8em;" />
+			<br />
+			Share on a forum:
+			<input type="text" value='[URL=http://movielistr.com/libraries/{{ user.id }}/][IMG]http://movielistr.com/stats/{{ user.id }}/[/IMG][/URL]' style="width: 430px; font-size: 0.8em;" />
+		</p>
+		<h2>Options</h2>
+		<ul>
+			<li>
+				<a href="/chngpwd/">Change my password</a>
+			</li>
+			<li>
+				<a href="/recover/">Recover my password</a>
+			</li>
+		</ul>
+	</div>
+	<div class="mid_block">
+		<h2>Friends</h2>
+		{% if friends %}
+			<table>
+				{% for friend in friends %}
+					<tr>
+						<td>
+							{{ friend.friend.username }}
+						</td>
+						<td>
+							<a href="/user/{{ friend.friend.id }}/">account page</a>
+						</td>
+						<td>
+							<a href="/libraries/{{ friend.friend.id }}/">library</a>
+						</td>
+						<td>
+							<a href="/locations/{{ friend.friend.id }}/">locations</a>
+						</td>
+						<td>
+							<a href="/wishlists/{{ friend.friend.id }}/">wish list</a>
+						</td>
+					</tr>
+				{% endfor %}
+			</table>
+		{% else %}
+			<p>
+				You don't have any friends yet. don't forget to add some by browsing <strong>other users' account pages</strong>.
+			</p>
+		{% endif %}
+		<p>
+			Want to find more friends? User our <a href="/user/search/">User search</a> page.
+		</p>
+	</div>
+	<div class="break"><!--i --></div>
+{% endblock %}

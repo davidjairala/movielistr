@@ -1,0 +1,12 @@
+<div class="comment">
+	<a class="bold" href="/user/{{ comment.user.id }}/">{{ comment.user.username }}:</a>
+	{% if user.is_staff %}
+		(<a href="/comment/del/{{ comment.id }}/" onclick="return confirm('Sure?');">-</a>)
+	{% endif %}
+	<div class="bla">
+		{{ comment.comment|urlize|linebreaks }}
+	</div>
+	<div class="date">
+		&raquo; {{ comment.added|date:"m/d/Y" }}
+	</div>
+</div>

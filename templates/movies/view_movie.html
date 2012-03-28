@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Movies - {{ movie.title|safe }}
+{% endblock %}
+
+{% block subtitle %}
+	<a href="/movies/">Movies</a> &raquo;
+	{{ movie.title|safe }}
+{% endblock %}
+
+{% block content %}
+	{% if movie %}
+		<div class="fleft">
+			<img src="{{ movie.box_art_big }}" alt="Poster: {{ movie.title }}" />
+		</div>
+		<p>
+			{% if has_movie %}
+				<a href="#" title="Remove this movie from your library" onclick="removeMovieFromLibrary({{ movie.id }}); return false;"><img src="/site_media/imgs/del_16.png" alt="" /></a>
+				<a href="#" title="Remove this movie from your library" onclick="removeMovieFromLibrary({{ movie.id }}); return false;">Remove</a> |
+				<a href="/library/edit/{{ movie.id }}">Edit</a>
+			{% else %}
+				<a href="#" title="Add this movie to your library" onclick="addMovieToLibrary({{ movie.id }}); return false;"><img src="/site_media/imgs/add_16.png" alt="" /></a>
+				<a href="#" title="Add this movie to your library" onclick="addMovieToLibrary({{ movie.id }}); return false;">Add to library</a>
+			{% endif %}
+			{% if has_wishlist %}
+				<a href="#" title="Remove from your wish list" onclick="removeMovieFromWishlist({{ movie.id }}); return false;"><img id="movie_img_favorite_{{ movie.id }}" src="/site_media/imgs/favorite_16.png" alt="" class="vmiddle" /></a>
+			{% else %}
+				<a href="#" title="Add to your wish list" onclick="addMovieToWishlist({{ movie.id }}); return false;"><img id="movie_img_favorite_{{ movie.id }}" src="/site_media/imgs/favorite_off_16.png" alt="" class="vmiddle" /></a>
+			{% endif %}
+		</p>
+		<p>
+			<strong>Release year:</strong>
+			{{ movie.release_year }}
+		</p>
+		<p>
+			<strong>Rating:</strong>
+			{{ movie.rating }}
+		</p>
+		<p>
+			<strong>Genres:</strong>
+			{{ movie.link_genres|safe }}
+		</p>
+		<p>
+			<strong>Score:</strong>
+			{{ movie.score }}
+		</p>
+		{% if mu %}
+			<p>
+				<strong>You own this movie in:</strong>
+				{{ mu.link_location|safe }}
+			</p>
+			{% if mu.notes %}
+				<div class="break"><!-- i --></div>
+				<p>
+					<strong>Your notes:</strong>
+					{{ mu.notes|urlize|linebreaks }}
+				</p>
+			{% endif %}
+		{% endif %}
+		<div class="break"><!-- i --></div>
+		<p>
+			<a href="{{ movie.link }}" target="_blank" title="Rent {{ movie.title }} on Netflix">Rent on Netflix</a> &#183;
+			<a href="http://www.amazon.com/s/ref=nb_ss_d?tag=movielistr&url=search-alias%3Ddvd&field-keywords={{ movie.title }}" target="_blank" title="Buy {{ movie.title }} on Netflix">Buy on Amazon</a> &#183;
+			<a href="http://www.imdb.com/find?s=tt&q={{ movie.title }}" target="_blank" title="{{ movie.title }} on IMDB">IMDB</a> &#183;
+			<a href="http://en.wikipedia.org/w/index.php?title=Special%3ASearch&search={{ movie.title }}&go=Go" target="_blank" title="{{ movie.title }} on Wikipedia">Wikipedia</a>
+		</p>
+		{% if rels %}
+			<div class="break"><!-- i --></div>
+			<br />
+			<div class="rels infobox">
+				<h3><a href="#" onclick="toggleRels(); return false;" id="cont_rels_link">+ Similar movies</a></h3>
+				<div id="cont_rels">
+					{{ rels_html|safe }}
+				</div>
+				<div class="break"><!-- i --></div>
+			</div>
+		{% endif %}
+		{% if trailer %}
+			<div class="break"><!-- i --></div>
+			<br />
+			<div class="trailer">
+				<h3><a href="#" onclick="toggleTrailer(); return false;" id="cont_trailer_link">+ Trailer</a></h3>
+				<div id="cont_trailer">
+					<object width="600" height="486"><param name="movie" value="http://www.youtube.com/v/{{ trailer.trailer_stub }}"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/{{ trailer.trailer_stub }}" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="600" height="486"></embed></object>
+				</div>
+			</div>
+		{% endif %}
+		<br />
+		{% if error %}
+			<p class="error">
+				{% ifequal error 'no_comment' %}
+					Please enter a comment.
+				{% endifequal %}
+			</p>
+		{% endif %}
+		{% if info %}
+			<p class="success">
+				{% ifequal info 'added_comment' %}
+					Your comment has been added.  Thanks!
+				{% endifequal %}
+				{% ifequal info 'deleted_comment' %}
+					The comment has been deleted.
+				{% endifequal %}
+			</p>
+		{% endif %}
+		<div class="break"><!-- i --></div>
+		<div class="comments">
+			<h3>Comments</h3>
+			{% if user.is_authenticated %}
+				<form method="post" action="/movie/comment/{{ movie.id }}/">
+					<textarea name="comment"></textarea>
+					<br />
+					{% if user.is_staff %}
+						<select name="cheat_user">
+							{% for suser in staff_users %}
+								<option value="{{ suser.id }}" {% ifequal suser.id user.id %}selected="selected"{% endifequal %}>{{ suser.username }}</option>
+							{% endfor %}
+						</select>
+						<br />
+					{% endif %}
+					<input type="submit" value="Comment" class="bold" />
+				</form>
+			{% else %}
+				<p class="error">
+					You need to <a href="/login/?next=/movie/{{ movie.id }}/">login</a> or <a href="/login/?next=/movie/{{ movie.id }}/">register</a> to comment on this movie.  Registration is quick, free and easy and won't take longer than 20 seconds.
+				</p>
+			{% endif %}
+			{% if comments.object_list %}
+				{% for comment in comments.object_list %}
+					{% include "movies/comment.html" %}
+				{% endfor %}
+			{% endif %}
+			<div class="nav">
+				{% if comments.has_previous %}
+					<a href="/movie/{{ movie.id }}/?page={{ comments.previous_page_number }}">&larr; previous</a>
+				{% endif %}
+				{% if comments.has_next %}
+					<a href="/movie/{{ movie.id }}/?page={{ comments.next_page_number }}">next &rarr;</a>
+				{% endif %}
+			</div>
+		</div>
+	{% endif %}
+{% endblock %}

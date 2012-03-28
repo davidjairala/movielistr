@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+	My locations - Edit - {{ location.tag }}
+{% endblock %}
+
+{% block subtitle %}
+	<a href="/locations/{{ user.id }}/">My locations</a> &raquo; 
+	Edit &raquo; {{ location.tag }}
+{% endblock %}
+
+{% block content %}
+	{% if err %}
+		<p class="error">
+			{{ err }}
+		</p>
+	{% endif %}
+	{% if location %}
+		<form method="post" action="/locations/edit/{{ location.id }}/">
+			<p>
+				<strong>Location:</strong><br />
+				<input type="text" name="tag" value="{{ location.tag }}" style="width: 400px;" />
+			</p>
+			<p>
+				<input type="submit" value="Edit" class="bold" />
+			</p>
+		</form>
+	{% endif %}
+{% endblock %}

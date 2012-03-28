@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}
+	User: {{ view_user.username }}
+{% endblock %}
+
+{% block subtitle %}
+	User: {{ view_user.username }}
+{% endblock %}
+
+{% block content %}
+	{% if show_social %}
+		<h2>Social</h2>
+		<p>
+			{{ view_user.username }} 
+			{% if are_friends %}
+				<span id="text_friend_{{ view_user.id }}">is your friend.  <a href="#" onclick="toggleFriend({{ view_user.id }}); return false;">Remove?</a></span>
+			{% else %}
+				<span id="text_friend_{{ view_user.id }}">is <strong>not</strong> your friend.  <a href="#" onclick="toggleFriend({{ view_user.id }}); return false;">Add?</a></span>
+			{% endif %}
+		</p>
+	{% endif %}
+	<h2>Stats</h2>
+	<p>
+		Member since {{ view_user.date_joined|date:"m/d/y" }}
+	</p>
+	<p>
+		{{ movies_owned }} movies in <a href="/libraries/{{ view_user.id }}/">his/her library</a>.
+	</p>
+	<p>
+		{{ movies_wishlist }} movies in <a href="/wishlists/{{ view_user.id }}/">his/her wishlist</a>.
+	</p>
+	{% if avg_score %}
+		<p>
+			<abbr title="Your average score is an average of the individual score of all movies you own.">Average score</abbr>: {{ avg_score }}
+		</p>
+	{% endif %}
+	<h2>Badge</h2>
+	<p>
+		<a href="http://movielistr.com/libraries/{{ view_user.id }}/"><img src="/stats/{{ view_user.id }}/" /></a>
+	</p>
+	<p>
+		Want to share this badge in a site or forums?  Copy and paste the following code:
+		<br />
+		<input type="text" value='<a href="http://movielistr.com/libraries/{{ view_user.id }}/"><img src="http://movielistr.com/stats/{{ view_user.id }}/" /></a>' style="width: 430px; font-size: 0.8em;" />
+		<br />
+		Direct image link:
+		<input type="text" value='http://movielistr.com/stats/{{ view_user.id }}/' style="width: 430px; font-size: 0.8em;" />
+		<br />
+		Share on a forum:
+		<input type="text" value='[URL=http://movielistr.com/libraries/{{ view_user.id }}/][IMG]http://movielistr.com/stats/{{ view_user.id }}/[/IMG][/URL]' style="width: 430px; font-size: 0.8em;" />
+	</p>
+	<h2>{{ view_user.username }}'s pages</h2>
+	<ul>
+		<li><a href="/libraries/{{ view_user.id }}/">library</a></li>
+		<li><a href="/locations/{{ view_user.id }}/">locations</a></li>
+		<li><a href="/wishlists/{{ view_user.id }}/">wish list</a></li>
+	</ul>
+	<p>
+		Want to find more friends? User our <a href="/user/search/">User search</a> page.
+	</p>
+{% endblock %}

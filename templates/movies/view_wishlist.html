@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}
+	{% if wl_user %}
+		{{ wl_user.username }}'s wish list
+	{% else %}
+		View wish list
+	{% endif %}
+{% endblock %}
+
+{% block subtitle %}
+	{% if wl_user %}
+		<a href="/wishlists/{{ wl_user.id }}/">{{ wl_user.username }}'s wish list</a> &raquo; 
+		Page {{ pnum }}
+	{% else %}
+		View wish list
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+	{% if err %}
+		<p class="error">{{ err }}</p>
+	{% else %}
+		<form method="get" action="/wishlists/{{ wl_user.id }}/">
+		<p>
+			<input type="text" name="q" id="search_q" value="{% if q %}{{ q }}{% endif %}" style="width: 300px;" /> 
+			<input type="submit" value="Search" class="bold" /> 
+			<input type="checkbox" name="exact" value="1" class="vmiddle" {% if exact %}checked="checked"{% endif %} /> exact?
+		</p>
+		</form>
+		<div class="sort_options">
+			<strong>sort by:</strong> 
+			<a href="/wishlists/{{ wl_user.id }}/?sort=added_on&page={{ pnum }}{% if exact %}&exact=1{% endif %}{% if slink %}{{ slink }}{% endif %}" {% ifequal sort 'added_on' %}class="bold"{% endifequal %}>added on</a> &#183; 
+			<a href="/wishlists/{{ wl_user.id }}/?sort=most_added&page={{ pnum }}{% if exact %}&exact=1{% endif %}{% if slink %}{{ slink }}{% endif %}" {% ifequal sort 'most_added' %}class="bold"{% endifequal %}>most added</a> &#183; 
+			<a href="/wishlists/{{ wl_user.id }}/?sort=high_scores&page={{ pnum }}{% if exact %}&exact=1{% endif %}{% if slink %}{{ slink }}{% endif %}" {% ifequal sort 'high_scores' %}class="bold"{% endifequal %}>highest scores</a> &#183;                                                                                                                     
+			<a href="/wishlists/{{ wl_user.id }}/?sort=title&page={{ pnum }}{% if exact %}&exact=1{% endif %}{% if slink %}{{ slink }}{% endif %}" {% ifequal sort 'title' %}class="bold"{% endifequal %}>titles</a>
+		</div>
+		{% if movies.object_list %}
+			<div class="infobox">
+				{{ movies_html|safe }}
+				<div class="break"><!-- i --></div>
+				<div class="nav">
+					{% if movies.has_previous %}
+						<a href="/wishlists/{{ wl_user.id }}/?page={{ movies.previous_page_number }}{% if exact %}&exact=1{% endif %}{% if sort %}&sort={{ sort }}{% endif %}{% if slink %}{{ slink }}{% endif %}">&larr; previous</a>
+					{% endif %}
+					{% if movies.has_next %}
+						<a href="/wishlists/{{ wl_user.id }}/?page={{ movies.next_page_number }}{% if exact %}&exact=1{% endif %}{% if sort %}&sort={{ sort }}{% endif %}{% if slink %}{{ slink }}{% endif %}">next &rarr;</a>
+					{% endif %}
+				</div>
+			</div>
+			<p>
+				If you want to share this wish list with a friend, send them the following link:<br />
+				<br />
+				http://movielistr.com/wishlists/{{ wl_user.id }}/
+			</p>
+		{% else %}
+			<p class="error">
+				{% ifequal wl_user.id user.id %}
+					You haven't any movies to your wish list.  To add some movies, please use our <a href="/movies/">movie list</a>.
+				{% else %}
+					We couldn't find what you're looking for in {{ wl_user.username }}'s wish list.
+				{% endifequal %}
+			</p>
+		{% endif %}
+		<h2>{{ wl_user.username }}'s pages</h2>
+		<ul>
+			<li><a href="/user/{{ wl_user.id }}/">account page</a></li>
+			<li><a href="/libraries/{{ wl_user.id }}/">library</a></li>
+			<li><a href="/locations/{{ wl_user.id }}/">locations</a></li>
+		</ul>
+	{% endif %}
+{% endblock %}

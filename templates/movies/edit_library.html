@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}
+	My library - Edit - {{ movie.title }}
+{% endblock %}
+
+{% block subtitle %}
+	<a href="/libraries/{{ user.id }}/">My library</a> &raquo; 
+	Edit &raquo; {{ movie.title }}
+{% endblock %}
+
+{% block content %}
+	{% if err %}
+		<p class="error">
+			{{ err }}
+		</p>
+	{% endif %}
+	{% if mu %}
+		<form method="post" action="/library/edit/{{ movie.id }}/">
+			<p>
+				<strong>Where have you stored this movie?</strong><br />
+				<input type="text" name="location" value="{{ mu.location }}" style="width: 400px;" id="edit_movie_tags" />
+				<div class="small">
+					Enter comma-separated tags describing where you have stored this movie, for example: <strong>bedroom, desk drawer, cd-case</strong> or <strong>yellow hdd</strong>.  (<a href="/locations/{{ user.id }}/">Manage your location tags</a>).
+				</div>
+			</p>
+			<p>
+				<strong>Notes:</strong><br />
+				<textarea name="notes">{% if mu.notes %}{{ mu.notes }}{% endif %}</textarea>
+				<div class="small">
+					Any extra notes or description you may want to add about the movie.
+				</div>
+			</p>
+			<p>
+				<input type="submit" value="Edit" class="bold" />
+			</p>
+		</form>
+	{% endif %}
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#edit_movie_tags").autocomplete('/ac_tags', {
+				multiple: true,
+				autoFill: true
+			});
+		});
+	</script>
+{% endblock %}

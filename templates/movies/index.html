@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Movies
+	{% if pnum %}
+		- Page {{ pnum }}
+	{% endif %}
+{% endblock %}
+
+{% block subtitle %}
+	{% if q %}
+		<a href="/movies">Movies</a> - Searching: "{{ q }}"
+	{% else %}
+		Movies
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+	<p class="info">
+		Here you can search for movies you have to add to your library.  Just enter your search terms on the following forms and click the <strong>search</strong> button:
+	</p>
+	<form method="get" action="/movies">
+	<p>
+		<input type="text" name="q" id="search_q" value="{% if q %}{{ q }}{% endif %}" style="width: 300px;" /> 
+		<input type="submit" value="Search" class="bold" /> 
+		<input type="checkbox" name="exact" value="1" class="vmiddle" {% if exact %}checked="checked"{% endif %} /> exact?
+	</p>
+	</form>
+	<div class="sort_options">
+		<strong>sort by:</strong> 
+		<a href="/movies/?sort=added_on&page={{ pnum }}{% if exact %}&exact=1{% endif %}{% if slink %}{{ slink }}{% endif %}" {% ifequal sort 'added_on' %}class="bold"{% endifequal %}>added on</a> &#183; 
+		<a href="/movies/?sort=most_added&page={{ pnum }}{% if exact %}&exact=1{% endif %}{% if slink %}{{ slink }}{% endif %}" {% ifequal sort 'most_added' %}class="bold"{% endifequal %}>most added</a> &#183; 
+		<a href="/movies/?sort=high_scores&page={{ pnum }}{% if exact %}&exact=1{% endif %}{% if slink %}{{ slink }}{% endif %}" {% ifequal sort 'high_scores' %}class="bold"{% endifequal %}>highest scores</a> &#183;                                                                                                                     
+		<a href="/movies/?sort=title&page={{ pnum }}{% if exact %}&exact=1{% endif %}{% if slink %}{{ slink }}{% endif %}" {% ifequal sort 'title' %}class="bold"{% endifequal %}>titles</a>
+	</div>
+	{% if movies.object_list %}
+		<div class="infobox">
+			{{ movie_html|safe }}
+			<div class="break"><!-- i --></div>
+			<div class="nav">
+				{% if movies.has_previous %}
+					<a href="/movies/?page={{ movies.previous_page_number }}{% if exact %}&exact=1{% endif %}{% if sort %}&sort={{ sort }}{% endif %}{% if slink %}{{ slink }}{% endif %}">&larr; previous</a>
+				{% endif %}
+				{% if movies.has_next %}
+					<a href="/movies/?page={{ movies.next_page_number }}{% if exact %}&exact=1{% endif %}{% if sort %}&sort={{ sort }}{% endif %}{% if slink %}{{ slink }}{% endif %}">next &rarr;</a>
+				{% endif %}
+			</div>
+		</div>
+	{% else %}
+		<p class="error">
+			We couldn't find any movies related to what you're looking for.  Maybe try another search term?
+		</p>
+	{% endif %}
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+	User search - Page {{ pnum }}
+{% endblock %}
+
+{% block subtitle %}
+	<a href="/user/search/">User search</a> &raquo; Page {{ pnum }}
+{% endblock %}
+
+{% block content %}
+	<p>
+		If you want to find new friends or view another user's account page, wish list, library, etc., please use the following search field to find them.  You can find users by their username or e-mail if you happen to know it.
+	</p>
+	<form method="get" action="/user/search/">
+		<input type="text" name="q" id="search_q" value="{% if q %}{{ q }}{% endif %}" style="width: 300px;" /> 
+		<input type="submit" value="Search" class="bold" /> 
+		<input type="checkbox" name="exact" value="1" class="vmiddle" {% if exact %}checked="checked"{% endif %} /> exact?
+	</form>
+	{% if users.object_list %}
+		<div class="infobox">
+			{% for user in users.object_list %}
+				<div class="big">
+					<a href="/user/{{ user.id }}/">{{ user.username }}</a>
+				</div>
+				<br />
+			{% endfor %}
+			<div class="break"><!-- i --></div>
+			<div class="nav">
+				{% if users.has_previous %}
+					<a href="/user/search/?page={{ users.previous_page_number }}{% if exact %}&exact=1{% endif %}{% if slink %}{{ slink }}{% endif %}">&larr; previous</a>
+				{% endif %}
+				{% if users.has_next %}
+					<a href="/user/search/?page={{ users.next_page_number }}{% if exact %}&exact=1{% endif %}{% if slink %}{{ slink }}{% endif %}">next &rarr;</a>
+				{% endif %}
+			</div>
+		</div>
+	{% endif %}
+{% endblock %}

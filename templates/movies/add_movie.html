@@ -1,0 +1,15 @@
+<h3>Add {{ movie.title }} to your library</h3>
+<form method="get" action="/movies/" id="add_movie_form">
+<p>
+	<strong>Where have you stored this movie?</strong>
+	<br />
+	<input type="text" name="tag" value="" style="width: 300px;" id="add_movie_tags" />
+	<div class="small">
+		Enter comma-separated tags describing where you have stored this movie, for example: <strong>bedroom, desk drawer, cd-case</strong> or <strong>yellow hdd</strong>.  (<a href="/locations/{{ user.id }}/">Manage your location tags</a>).
+	</div>
+</p>
+<p>
+	<input type="submit" value="Add movie to library" class="bold" />
+	<input type="button" value="Cancel" onclick="hideInfo();" />
+</p>
+</form>

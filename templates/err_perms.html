@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Oops! You don't have permission to view this
+{% endblock %}
+
+{% block subtitle %}
+	Oops! You don't have permission to view this
+{% endblock %}
+
+{% block content %}
+	<p class="error">
+		We're sorry but you don't seem to have permission to view this.
+	</p>
+	<p>
+		<a href="javascript:history.back();">Back</a>
+	</p>
+{% endblock %}

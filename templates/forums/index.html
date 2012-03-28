@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Forums
+{% endblock %}
+
+{% block subtitle %}
+	Forums
+{% endblock %}
+
+{% block content %}
+	{% if cats %}
+		{% for cat in cats %}
+			<div class="infobox">
+				<div class="huge">
+					<a href="/forums/{{ cat.id }}/">{{ cat.title }}</a>
+				</div>
+				<div>
+					{{ cat.description|linebreaks }}
+				</div>
+			</div>
+			<br />
+		{% endfor %}
+	{% endif %}
+{% endblock %}
